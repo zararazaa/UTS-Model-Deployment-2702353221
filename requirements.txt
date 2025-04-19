@@ -5,3 +5,4 @@ numpy
 matplotlib
 seaborn
 streamlit>=1.26.0
+xgboost
