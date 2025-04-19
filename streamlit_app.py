@@ -5,11 +5,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-raw_dataset_path = 
+raw_dataset_path = 'Dataset_A_loan.csv'
+df = pd.read_csv(raw_dataset_path)
 
 
 def main():
-    st.title('UTS Model Deployement - Zara Abigail Budiman - 2702353221)
+    st.title('UTS Model Deployement - Zara Abigail Budiman - 2702353221')
 
     st.subheader("Please input data :3")
     user_input = {}
