@@ -46,12 +46,6 @@ def main():
     intent2 = 0 if intent == "Venture" else (1 if intent == "Education" else (2 if intent == "Medical" else (3 if intent == "Personal" else (4 if intent == "Home Improvement" else 5))))
 
 
-    import os
-    if not os.path.exists(model_filename):
-        print(f"Model file '{model_filename}' does not exist!")
-    else:
-        print(f"Model file '{model_filename}' found.")
-
     st.write("Check if it is already correct:", user_input)
     model = load_model(model_filename)
     
