@@ -49,7 +49,8 @@ def main():
     
     
     if st.button("Predict"):
-        user_input = pd.DataFrame({
+        
+        user_input = pd.DataFrame([{
         "person_age": age,
         "person_gender": gender2,
         "person_education": education2,
@@ -63,10 +64,11 @@ def main():
         "cb_person_cred_hist_length": history,
         "credit_score": score,
         "previous_loan_defaults_on_file": prev2
-    })
+    }])
+        
 
         model_path = "xgb.pkl"
-        model = load_model(model_filename)
+        model = load_model(model_path)
         prediction = model.predict(user_input)
         st.success(f"Loan status prediction: **{prediction}**")
 
