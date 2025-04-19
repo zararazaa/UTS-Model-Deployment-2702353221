@@ -55,6 +55,8 @@ def main():
         "previous_loan_defaults_on_file": prev2
     }
 
+    st.write("Check if it is already correct:", user_input)
+    
     if st.button("Predict"):
         model = load_model(model_filename)
         prediction = predict_with_model(model, user_input)
