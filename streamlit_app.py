@@ -38,7 +38,9 @@ def main():
     prev = st.selectbox("Have you failed to repay a loan before?", ("Yes", "No"))
 
     prev2 = 1 if prev == "Yes" else 0
-
+    gender2 = 1 if gender == "female" else 0
+    
+    
     user_input = {
         "person_age": age,
         "person_gender": gender,
