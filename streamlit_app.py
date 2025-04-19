@@ -3,15 +3,14 @@ import pandas as pd
 import joblib
 
 dataset_path = "Dataset_A_loan.csv"
-model_filename = "trained_model.pkl"
+model_filename = "trained_model.pkl (1)"
 
 def load_data():
     return pd.read_csv(dataset_path)
 
 def load_model(filename):
-    with open(filename, "rb") as f:
-        model = pickle.load(f)
-    return model
+    model = joblib.load(filename)
+    
 
 def predict_with_model(model, user_input):
     prediction = model.predict([user_input])
@@ -61,9 +60,9 @@ def main():
     }
 
     st.write("Check if it is already correct:", user_input)
+    model = load_model(model_filename)
     
     if st.button("Predict"):
-        model = load_model(model_filename)
         user_input_list = list(user_input.values())
         prediction = model.predict([user_input_list])
         st.success(f"Loan status prediction: **{prediction}**")
