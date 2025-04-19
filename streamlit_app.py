@@ -6,7 +6,7 @@ import pickle
 
 with open("xgb.pkl", "rb") as f:
     model = pickle.load(f)
-with open("ohe.pkl", "rb) as f:
+with open("ohe.pkl", "rb") as f:
     model = pickle.load(f)
 with open("oe.pkl", "rb") as f:
     model = pickle.load(f)
