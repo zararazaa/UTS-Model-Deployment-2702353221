@@ -55,12 +55,12 @@ def main():
     user_input = pd.DataFrame([{
         "person_age": age,
         "person_gender": gender2,
-        "person_education": education2,
+        "person_education": education,
         "person_income": income,
         "person_emp_exp": exp,
-        "person_home_ownership": ownership2,
+        "person_home_ownership": ownership,
         "loan_amnt": amount,
-        "loan_intent": intent2,
+        "loan_intent": intent,
         "loan_int_rate": rate,
         "loan_percent_income": loan_percent / 100,  # if model expects 0–1
         "cb_person_cred_hist_length": history,
