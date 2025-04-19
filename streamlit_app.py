@@ -58,6 +58,11 @@ def main():
         "credit_score": score,
         "previous_loan_defaults_on_file": prev2
     }
+    import os
+    if not os.path.exists(model_filename):
+        print(f"Model file '{model_filename}' does not exist!")
+    else:
+        print(f"Model file '{model_filename}' found.")
 
     st.write("Check if it is already correct:", user_input)
     model = load_model(model_filename)
