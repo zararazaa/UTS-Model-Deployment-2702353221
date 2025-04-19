@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-# Load the encoders and model
 def load_model(filename):
     with open(filename, 'rb') as file:
         model = pickle.load(file)
@@ -21,11 +20,11 @@ def preprocess_input(user_input, oe, ohe):
     # Apply ordinal encoding to 'person_education'
     user_input['person_education'] = oe.transform(user_input[['person_education']])
 
-    # Apply one-hot encoding to 'person_home_ownership' and 'loan_intent'
     user_input = pd.get_dummies(user_input, columns=['person_home_ownership', 'loan_intent'], drop_first=True)
 
-    # Return the preprocessed data
     return user_input
+st.write("UTS  - Zara Abigail Budiman - 2702353221")
+
 
 def main():
     st.title("UTS Model Deployment")
@@ -72,12 +71,11 @@ def main():
 
     
     
-    # Load encoders and model
+ 
     oe = load_encoder("oe.pkl")
     ohe = load_encoder("ohe.pkl")  
     model = load_model("xgb.pkl")  
 
-    # Preprocess user input (apply ordinal and one-hot encoding)
     user_input = preprocess_input(user_input, oe, ohe)
     user_input = user_input.reindex(columns=model.get_booster().feature_names, fill_value=0)
     
