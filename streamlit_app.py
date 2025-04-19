@@ -70,6 +70,7 @@ def main():
         model_path = "xgb.pkl"
         model = load_model(model_path)
         prediction = model.predict(user_input)
+        prediction_label = "Accepeted" if prediction == 1 else 0
         st.success(f"Loan status prediction: **{prediction}**")
 
 if __name__ == "__main__":
