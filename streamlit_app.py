@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 
 dataset_path = "Dataset_A_loan.csv"
-model_filename = "trained_model (1).pkl"
+model_filename = "xgb.pkl"
 
 def load_data():
     return pd.read_csv(dataset_path)
