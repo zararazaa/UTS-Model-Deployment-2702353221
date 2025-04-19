@@ -1,16 +1,31 @@
 import streamlit as st
 import pandas as pd
-import joblib
 import pickle
 
+# Load the encoders and model
 def load_model(filename):
     with open(filename, 'rb') as file:
-        model = joblib.load(file)
+        model = pickle.load(file)
     return model
 
+def load_encoder(filename):
+    with open(filename, 'rb') as file:
+        encoder = pickle.load(file)
+    return encoder
+
 def predict_with_model(model, user_input):
-    prediction = model.predict([user_input])
+    prediction = model.predict(user_input)
     return prediction[0]
+
+def preprocess_input(user_input, oe, ohe):
+    # Apply ordinal encoding to 'person_education'
+    user_input['person_education'] = oe.transform(user_input[['person_education']])
+
+    # Apply one-hot encoding to 'person_home_ownership' and 'loan_intent'
+    user_input = pd.get_dummies(user_input, columns=['person_home_ownership', 'loan_intent'], drop_first=True)
+
+    # Return the preprocessed data
+    return user_input
 
 def main():
     st.title("UTS Model Deployment")
@@ -33,18 +48,11 @@ def main():
     score = st.slider("Credit Score", 350, 850, step=1)
     prev = st.selectbox("Have you failed to repay a loan before?", ("Yes", "No"))
 
+    # Preprocess input data
     prev2 = 1 if prev == "Yes" else 0
     gender2 = 1 if gender == "female" else 0
-    education2 = 0 if education == "High School" else (1 if education == "Bachelor" else (2 if education == "Associate" else (3 if education == "Master" else 4)))
-    ownership2 = 0 if ownership == "Rent" else (1 if ownership == "Own" else (2 if ownership == "Mortgage" else 3))
-    intent2 = 0 if intent == "Venture" else (1 if intent == "Education" else (2 if intent == "Medical" else (3 if intent == "Personal" else (4 if intent == "Home Improvement" else 5))))
 
-
-    
-    
-    if st.button("Predict"):
-        
-        user_input = pd.DataFrame([{
+    user_input = pd.DataFrame([{
         "person_age": age,
         "person_gender": gender2,
         "person_education": education2,
@@ -59,14 +67,20 @@ def main():
         "credit_score": score,
         "previous_loan_defaults_on_file": prev2
     }])
-        
 
-        model_path = "xgb.pkl"
-        model = load_model(model_path)
-        prediction = model.predict(user_input)
-        prediction_label = "Accepeted" if prediction == 1 else 0
-        st.success(f"Loan status prediction: **{prediction}**")
+    # Load encoders and model
+    oe = load_encoder("oe.pkl")  # Ordinal Encoder
+    ohe = load_encoder("ohe.pkl")  # OneHotEncoder
+    model = load_model("xgb.pkl")  # XGBoost Model
+
+    # Preprocess user input (apply ordinal and one-hot encoding)
+    user_input = preprocess_input(user_input, oe, ohe)
+
+    if st.button("Predict"):
+        # Make prediction
+        prediction = predict_with_model(model, user_input)
+        prediction_label = "Accepted" if prediction == 1 else "Rejected"
+        st.success(f"Loan status prediction: **{prediction_label}**")
 
 if __name__ == "__main__":
     main()
-
