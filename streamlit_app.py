@@ -48,6 +48,8 @@ def main():
     score = st.slider("Credit Score", 350, 850, step=1)
     prev = st.selectbox("Have you failed to repay a loan before?", ("Yes", "No"))
 
+    
+
     # Preprocess input data
     prev2 = 1 if prev == "Yes" else 0
     gender2 = 1 if gender == "female" else 0
@@ -67,7 +69,7 @@ def main():
         "credit_score": score,
         "previous_loan_defaults_on_file": prev2
     }])
-
+    
     # Load encoders and model
     oe = load_encoder("oe.pkl")  # Ordinal Encoder
     ohe = load_encoder("ohe.pkl")  # OneHotEncoder
@@ -75,7 +77,8 @@ def main():
 
     # Preprocess user input (apply ordinal and one-hot encoding)
     user_input = preprocess_input(user_input, oe, ohe)
-
+    user_input = user_input[model.get_booster().feature_names]
+    
     if st.button("Predict"):
         # Make prediction
         prediction = predict_with_model(model, user_input)
