@@ -3,12 +3,6 @@ import pandas as pd
 import joblib
 import pickle
 
-dataset_path = "Dataset_A_loan.csv"
-
-
-def load_data():
-    return pd.read_csv(dataset_path)
-
 def load_model(filename):
     with open(filename, 'rb') as file:
         model = joblib.load(file)
