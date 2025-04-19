@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import pickle
 
 dataset_path = "Dataset_A_loan.csv"
 model_filename = "xgb.pkl"
@@ -9,7 +10,8 @@ def load_data():
     return pd.read_csv(dataset_path)
 
 def load_model(filename):
-    model = joblib.load(filename)
+    with open(filename, 'rb') as file:
+        model = pickle.load(file)
     return model
 
 def predict_with_model(model, user_input):
