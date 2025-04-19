@@ -25,7 +25,7 @@ def main():
     # Input fields
     age = st.slider("Age", 20, 80, step=1)
     gender = st.selectbox("Gender", ("male", "female"))
-    education = st.selectbox("Last Education", ["High School", "Bachelor", "Associate", "Master", "Doctorate"])
+    education = st.selectbox("Last Education", ["High School", "Associate", "Bachelor", "Master", "Doctorate"])
     income = st.slider("Annual Income", 8000, 500000, step=1000)
     exp = st.slider("Years of Work Experience", 0, 75, step=1)
     ownership = st.selectbox("Home Ownership Status", ["Rent", "Own", "Mortgage", "Other"])
@@ -39,17 +39,19 @@ def main():
 
     prev2 = 1 if prev == "Yes" else 0
     gender2 = 1 if gender == "female" else 0
-    
-    
+    education2 = 0 if education == "High School" else (1 if education == "Bachelor" else (2 if education == "Associate" else (3 if education == "Master" else 4)))
+    ownership2 = 0 if ownership == "Rent" else (1 if ownership == "Own" else (2 if ownership == "Mortgage" else 3))
+    intent2 = 0 if intent == "Venture" else (1 if intent == "Education" else (2 if intent == "Medical" else (3 if intent == "Personal" else (4 if intent == "Home Improvement" else 5))))
+
     user_input = {
         "person_age": age,
-        "person_gender": gender,
-        "person_education": education,
+        "person_gender": gender2,
+        "person_education": education2,
         "person_income": income,
         "person_emp_exp": exp,
-        "person_home_ownership": ownership,
+        "person_home_ownership": ownership2,
         "loan_amnt": amount,
-        "loan_intent": intent,
+        "loan_intent": intent2,
         "loan_int_rate": rate,
         "loan_percent_income": loan_percent / 100,  # if model expects 0–1
         "cb_person_cred_hist_length": history,
