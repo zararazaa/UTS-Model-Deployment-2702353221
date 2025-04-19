@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-dataset_path = "Dataset_A_loan.csv"
-model_filename = "trained_model.pkl"
+# dataset_path = "Dataset_A_loan.csv"
+# model_filename = "trained_model.pkl"
 
 def load_data():
     return pd.read_csv(dataset_path)
@@ -22,7 +22,7 @@ def main():
 
     st.subheader("Please Input the Data")
     
-    data = load_data()
+    # data = load_data()
 
 
     age = st.slider("Age", 20, 80, step=1)
