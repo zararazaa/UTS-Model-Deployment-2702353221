@@ -62,7 +62,7 @@ def main():
         "loan_amnt": amount,
         "loan_intent": intent,
         "loan_int_rate": rate,
-        "loan_percent_income": loan_percent  # if model expects 0–1
+        "loan_percent_income": loan_percent,  # if model expects 0–1
         "cb_person_cred_hist_length": history,
         "credit_score": score,
         "previous_loan_defaults_on_file": prev2
