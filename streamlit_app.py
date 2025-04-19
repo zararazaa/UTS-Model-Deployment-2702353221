@@ -23,7 +23,7 @@ def preprocess_input(user_input, oe, ohe):
     user_input = pd.get_dummies(user_input, columns=['person_home_ownership', 'loan_intent'], drop_first=True)
 
     return user_input
-st.write("UTS  - Zara Abigail Budiman - 2702353221")
+st.write("Zara Abigail Budiman - 2702353221")
 
 
 def main():
