@@ -4,14 +4,14 @@ import joblib
 import pickle
 
 dataset_path = "Dataset_A_loan.csv"
-model_filename = "xgb.pkl"
+
 
 def load_data():
     return pd.read_csv(dataset_path)
 
 def load_model(filename):
     with open(filename, 'rb') as file:
-        model = pickle.load(file)
+        model = joblib.load(file)
     return model
 
 def predict_with_model(model, user_input):
@@ -45,7 +45,18 @@ def main():
     ownership2 = 0 if ownership == "Rent" else (1 if ownership == "Own" else (2 if ownership == "Mortgage" else 3))
     intent2 = 0 if intent == "Venture" else (1 if intent == "Education" else (2 if intent == "Medical" else (3 if intent == "Personal" else (4 if intent == "Home Improvement" else 5))))
 
-    user_input = {
+
+    import os
+    if not os.path.exists(model_filename):
+        print(f"Model file '{model_filename}' does not exist!")
+    else:
+        print(f"Model file '{model_filename}' found.")
+
+    st.write("Check if it is already correct:", user_input)
+    model = load_model(model_filename)
+    
+    if st.button("Predict"):
+        user_input = pd.DataFrame({
         "person_age": age,
         "person_gender": gender2,
         "person_education": education2,
@@ -59,19 +70,10 @@ def main():
         "cb_person_cred_hist_length": history,
         "credit_score": score,
         "previous_loan_defaults_on_file": prev2
-    }
-    import os
-    if not os.path.exists(model_filename):
-        print(f"Model file '{model_filename}' does not exist!")
-    else:
-        print(f"Model file '{model_filename}' found.")
+    })
 
-    st.write("Check if it is already correct:", user_input)
-    model = load_model(model_filename)
-    
-    if st.button("Predict"):
-        user_input_list = list(user_input.values())
-        prediction = model.predict([user_input_list])
+        model_path = "xgb.pkl"
+        prediction = model.predict(user_input)
         st.success(f"Loan status prediction: **{prediction}**")
 
 if __name__ == "__main__":
