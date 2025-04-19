@@ -16,11 +16,7 @@ def main():
     model_path = "xgb.pkl"
     model = load_model(model_path)
     
-    # Heading and Introduction
-    st.title("💰 Loan Approval Prediction App")
-    st.write("Project UTS - Derrick Vericho - 2702291305")
-    st.divider()
-    
+
     # Input section
     st.subheader("Please Input Your Data")
     
