@@ -63,7 +63,7 @@ def main():
     
     if st.button("Predict"):
         model = load_model(model_filename)
-        prediction = predict_with_model(model, user_input)
+        prediction = model.predict(user_input)
         st.success(f"Loan status prediction: **{prediction}**")
 
 if __name__ == "__main__":
