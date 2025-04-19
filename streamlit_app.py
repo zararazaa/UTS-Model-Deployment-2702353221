@@ -1,25 +1,24 @@
+import streamlit as st
 import pandas as pd
 import joblib
-import streamlit as st
+import pickle
 
-# Function to load the model
 def load_model(filename):
     with open(filename, 'rb') as file:
         model = joblib.load(file)
     return model
 
-# Main function to run the app
-def main():
-    st.set_page_config(page_title="Loan Approval Prediction", page_icon="💰", layout="wide")
-    
-    # Load the model
-    model_path = "xgb.pkl"
-    model = load_model(model_path)
-    
+def predict_with_model(model, user_input):
+    prediction = model.predict([user_input])
+    return prediction[0]
 
-    # Input section
-    st.subheader("Please Input Your Data")
-    
+def main():
+    st.title("UTS Model Deployment")
+    st.info("Predicting Loan Status")
+
+    st.subheader("Please Input the Data")
+
+    # Input fields
     age = st.slider("Age", 20, 80, step=1)
     gender = st.selectbox("Gender", ("male", "female"))
     education = st.selectbox("Last Education", ["High School", "Associate", "Bachelor", "Master", "Doctorate"])
@@ -33,16 +32,19 @@ def main():
     history = st.slider("Credit History Length (Years)", 2, 30, step=1)
     score = st.slider("Credit Score", 350, 850, step=1)
     prev = st.selectbox("Have you failed to repay a loan before?", ("Yes", "No"))
-    
-    # Encoding inputs
+
     prev2 = 1 if prev == "Yes" else 0
     gender2 = 1 if gender == "female" else 0
     education2 = 0 if education == "High School" else (1 if education == "Bachelor" else (2 if education == "Associate" else (3 if education == "Master" else 4)))
     ownership2 = 0 if ownership == "Rent" else (1 if ownership == "Own" else (2 if ownership == "Mortgage" else 3))
     intent2 = 0 if intent == "Venture" else (1 if intent == "Education" else (2 if intent == "Medical" else (3 if intent == "Personal" else (4 if intent == "Home Improvement" else 5))))
 
-    # Create input DataFrame
-    user_input = pd.DataFrame([{
+
+    
+    
+    if st.button("Predict"):
+        
+        user_input = pd.DataFrame([{
         "person_age": age,
         "person_gender": gender2,
         "person_education": education2,
@@ -52,22 +54,19 @@ def main():
         "loan_amnt": amount,
         "loan_intent": intent2,
         "loan_int_rate": rate,
-        "loan_percent_income": loan_percent / 100,  # model expects 0–1
+        "loan_percent_income": loan_percent / 100,  # if model expects 0–1
         "cb_person_cred_hist_length": history,
         "credit_score": score,
         "previous_loan_defaults_on_file": prev2
     }])
-    
-    # Prediction
-    if st.button("Predict"):
+        
+
+        model_path = "xgb.pkl"
+        model = load_model(model_path)
         prediction = model.predict(user_input)
-        prediction_label = "Accepted" if prediction == 1 else "Rejected"
-        st.subheader(f"Loan Status Prediction: **{prediction_label}**")
-        
-        # Display probability
-        prob = model.predict_proba(user_input)
-        st.write(f"Probability of being accepted: {max(prob[0]) * 100:.2f}%")
-        st.write(f"Probability of being rejected: {(1 - max(prob[0])) * 100:.2f}%")
-        
+        prediction_label = "Accepeted" if prediction == 1 else 0
+        st.success(f"Loan status prediction: **{prediction}**")
+
 if __name__ == "__main__":
     main()
+
