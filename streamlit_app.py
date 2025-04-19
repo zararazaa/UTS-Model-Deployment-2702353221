@@ -9,7 +9,8 @@ def load_data():
     return pd.read_csv(dataset_path)
 
 def load_model(filename):
-    model = joblib.load(filename)
+    with open(filename, "rb") as f:
+        model = pickle.load(f)
     return model
 
 def predict_with_model(model, user_input):
