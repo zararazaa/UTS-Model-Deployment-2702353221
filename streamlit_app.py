@@ -1,23 +1,21 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib
 import pickle
 
+# Load models and encoders
 with open("xgb.pkl", "rb") as f:
-    model = pickle.load(f)
+    xgb_model = pickle.load(f)
 with open("ohe.pkl", "rb") as f:
-    model = pickle.load(f)
+    ohe = pickle.load(f)
 with open("oe.pkl", "rb") as f:
-    model = pickle.load(f)
+    oe = pickle.load(f)
 
-
-# Load dataset to get feature info
+# Load dataset for UI input ranges
 df = pd.read_csv("Dataset_A_loan.csv")
 feature_columns = df.drop(columns=["loan_status"]).columns
 
 st.title('UTS Model Deployment - Zara Abigail Budiman - 2702353221')
-
 st.subheader("Please input data")
 
 # Get input from user
@@ -34,7 +32,6 @@ if st.button("Predict"):
     # Convert to DataFrame
     input_df = pd.DataFrame([user_input])
 
-    # Preprocessing same as in OOP model
     # Binary encoding
     gender_map = {"male": 0, "female": 1}
     default_map = {"No": 0, "Yes": 1}
@@ -47,10 +44,10 @@ if st.button("Predict"):
     # One-hot encoding
     for col in ["person_home_ownership", "loan_intent"]:
         encoded = ohe.transform(input_df[[col]])
-        encoded_df = pd.DataFrame(encoded, columns=ohe.get_feature_names_out([col]))
+        encoded_df = pd.DataFrame(encoded, columns=ohe.get_feature_names_out([col]), index=input_df.index)
         input_df = input_df.drop(columns=[col])
-        input_df = pd.concat([input_df.reset_index(drop=True), encoded_df.reset_index(drop=True)], axis=1)
+        input_df = pd.concat([input_df, encoded_df], axis=1)
 
     # Predict
-    prediction = model.predict(input_df)
+    prediction = xgb_model.predict(input_df)
     st.success(f"Prediction: {prediction[0]}")
