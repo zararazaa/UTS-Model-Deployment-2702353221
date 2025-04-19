@@ -69,6 +69,8 @@ def main():
         "credit_score": score,
         "previous_loan_defaults_on_file": prev2
     }])
+
+    user_input = user_input[model.get_booster().feature_names]
     
     # Load encoders and model
     oe = load_encoder("oe.pkl")  # Ordinal Encoder
