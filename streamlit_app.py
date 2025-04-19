@@ -2,11 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+import pickle
 
-# Load encoders and model
-oe = joblib.load("oe.pkl")
-ohe = joblib.load("ohe.pkl")
-model = joblib.load("xgb.pkl")
+with open("xgb.pkl", "rb") as f:
+    model = pickle.load(f)
+with open("ohe.pkl", "rb) as f:
+    model = pickle.load(f)
+with open("oe.pkl", "rb") as f:
+    model = pickle.load(f)
+
 
 # Load dataset to get feature info
 df = pd.read_csv("Dataset_A_loan.csv")
