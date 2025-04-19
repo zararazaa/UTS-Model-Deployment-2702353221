@@ -70,16 +70,16 @@ def main():
         "previous_loan_defaults_on_file": prev2
     }])
 
-    user_input = user_input[model.get_booster().feature_names]
+    
     
     # Load encoders and model
-    oe = load_encoder("oe.pkl")  # Ordinal Encoder
-    ohe = load_encoder("ohe.pkl")  # OneHotEncoder
-    model = load_model("xgb.pkl")  # XGBoost Model
+    oe = load_encoder("oe.pkl")
+    ohe = load_encoder("ohe.pkl")  
+    model = load_model("xgb.pkl")  
 
     # Preprocess user input (apply ordinal and one-hot encoding)
     user_input = preprocess_input(user_input, oe, ohe)
-    user_input = user_input[model.get_booster().feature_names]
+    user_input = user_input.reindex(columns=model.get_booster().feature_names, fill_value=0)
     
     if st.button("Predict"):
         # Make prediction
