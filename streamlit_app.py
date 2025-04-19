@@ -1,38 +1,56 @@
 import streamlit as st
+import pandas as pd
 import joblib
 
+# Path to dataset and model
 dataset_path = "Dataset_A_loan.csv"
+model_filename = "trained_model.pkl"
 
+# Function to load the dataset
 def load_data():
-  return pd.read_csv(dataset_path)  
+    return pd.read_csv(dataset_path)
 
+# Function to load the model
 def load_model(filename):
-  model = joblib.load(filename)
-  return model
+    model = joblib.load(filename)
+    return model
 
-def predict_with_model(model,user_input):
-  prediction = model.predict([user_input])
-  return prediction[0]
+# Function to make predictions
+def predict_with_model(model, user_input):
+    prediction = model.predict([user_input])
+    return prediction[0]
 
+# Streamlit app
 def main():
-  st.title("UTS Model Deployment")
-  st.info('Predicting Loan Status')
+    st.title("UTS Model Deployment")
+    st.info("Predicting Loan Status")
 
-  st.subheader("Please Input the Data :3")
-  user_input = {}
+    st.subheader("Please Input the Data")
+    
+    data = load_data()
+    feature_columns = [
+        col for col in data.columns if col != 'loan_status'
+    ]  # Exclude target column
 
-  data = load_data()
-  for feature in feature_columns:
-    if data[feature].dtype == 'object':
-      user_input[feature] = st.selectbox(f"Select {feature}", data[feature].max())
-    else:
-      user_input[feature] = st.slider(f"Enter {feature}", int(min_val), int(max_val), int((min_val + max_val) / 2, step=1)
+    user_input = {}
+    
+    for feature in feature_columns:
+        if data[feature].dtype == 'object':
+            options = data[feature].dropna().unique().tolist()
+            user_input[feature] = st.selectbox(f"{feature}", options)
+        else:
+            min_val = data[feature].min()
+            max_val = data[feature].max()
+            default_val = data[feature].median()
+            user_input[feature] = st.slider(f"{feature}", float(min_val), float(max_val), float(default_val))
 
-  model_filename = 'trained_model.pkl'
-  model = load_model(model_filename)
-  prediction = predict_with_model(model, user_input)
-  st.write("Loan status is", prediction)
+    model = load_model(model_filename)
+    if st.button("Predict"):
+        # Convert to the same order as model expects
+        input_list = [user_input[feature] for feature in feature_columns]
+        prediction = predict_with_model(model, input_list)
+        st.success(f"Loan Status Prediction: {prediction}")
 
-if__name__=="__main__":
-main()
-
+# Fix the typo in if-statement
+if __name__ == "__main__":
+    main()
