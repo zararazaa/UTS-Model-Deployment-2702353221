@@ -46,8 +46,7 @@ def main():
     intent2 = 0 if intent == "Venture" else (1 if intent == "Education" else (2 if intent == "Medical" else (3 if intent == "Personal" else (4 if intent == "Home Improvement" else 5))))
 
 
-    st.write("Check if it is already correct:", user_input)
-    model = load_model(model_filename)
+    
     
     if st.button("Predict"):
         user_input = pd.DataFrame({
@@ -67,6 +66,7 @@ def main():
     })
 
         model_path = "xgb.pkl"
+        model = load_model(model_filename)
         prediction = model.predict(user_input)
         st.success(f"Loan status prediction: **{prediction}**")
 
