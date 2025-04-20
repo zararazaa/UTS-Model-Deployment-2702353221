@@ -32,7 +32,7 @@ def main():
 
     st.subheader("Please Input the Data")
 
-    # Input fields
+    
     age = st.slider("Age", 20, 80, step=1)
     gender = st.selectbox("Gender", ("male", "female"))
     education = st.selectbox("Last Education", ["High School", "Associate", "Bachelor", "Master", "Doctorate"])
@@ -49,7 +49,7 @@ def main():
 
     
 
-    # Preprocess input data
+    
     prev2 = 1 if prev == "Yes" else 0
     gender2 = 1 if gender == "female" else 0
 
